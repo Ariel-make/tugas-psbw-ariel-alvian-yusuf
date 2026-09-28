@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profil — Ariel Alvian Yusuf</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root{
+        --bg: #10161c;
+        --panel: #161f27;
+        --panel-2: #1c2731;
+        --line: #2a3742;
+        --text: #dfe7ec;
+        --muted: #8ea0ac;
+        --amber: #f2a541;
+        --cyan: #57c7c2;
+        --red: #e2574c;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', system-ui, sans-serif;
+        margin:0;
+        padding:0;
+    }
+
+    .mono{ font-family:'JetBrains Mono', monospace; }
+
+    .termbar{
+        background: var(--panel-2);
+        border-bottom: 1px solid var(--line);
+        padding: 10px 20px;
+        display:flex;
+        align-items:center;
+        gap:8px;
+    }
+    .termbar .dot{ width:11px; height:11px; border-radius:50%; display:inline-block; }
+    .termbar .dot.r{ background:#e2574c; }
+    .termbar .dot.y{ background:#f2a541; }
+    .termbar .dot.g{ background:#57c7c2; }
+    .termbar .path{
+        margin-left:14px;
+        color: var(--muted);
+        font-size: 0.85rem;
+    }
+
+    .shell{
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 36px 20px 60px;
+    }
+
+    .id-card{
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 28px 24px;
+        position: sticky;
+        top: 24px;
+    }
+    .id-photo{
+        width: 128px;
+        height: 128px;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        display:block;
+        margin: 0 auto 18px;
+    }
+    .id-name{
+        font-size: 1.35rem;
+        font-weight: 700;
+        text-align:center;
+        margin-bottom: 2px;
+    }
+    .id-role{
+        text-align:center;
+        color: var(--cyan);
+        font-size: 0.85rem;
+        margin-bottom: 22px;
+    }
+    .id-row{
+        display:flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 0;
+        border-top: 1px solid var(--line);
+        font-size: 0.85rem;
+    }
+    .id-row:first-of-type{ border-top: none; }
+    .id-label{ color: var(--muted); }
+    .id-value{ color: var(--text); text-align:right; }
+
+    .id-links{ margin-top: 20px; }
+    .id-links a{
+        display:flex;
+        align-items:center;
+        gap: 8px;
+        color: var(--text);
+        text-decoration:none;
+        font-size: 0.85rem;
+        padding: 6px 0;
+    }
+    .id-links a:hover{ color: var(--amber); }
+
+    .sect{
+        margin-bottom: 36px;
+    }
+    .sect-head{
+        display:flex;
+        align-items:baseline;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .sect-tag{
+        color: var(--muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.03em;
+    }
+    .sect-title{
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin:0;
+    }
+    .sect-title::before{
+        content: "// ";
+        color: var(--amber);
+    }
+    .panel{
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 22px 24px;
+    }
+    .panel p{ line-height: 1.7; margin-bottom: 10px; color: var(--text); }
+    .panel p:last-child{ margin-bottom:0; }
+
+    .tag-list{ display:flex; flex-wrap:wrap; gap:8px; }
+    .tag{
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        color: var(--cyan);
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.82rem;
+    }
+
+    .stack-list{ margin:0; padding-left: 18px; color: var(--text); line-height: 1.8; }
+
+    .table-wrap{
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    table.grades{
+        margin-bottom:0;
+        color: var(--text);
+    }
+    table.grades thead th{
+        background: var(--panel-2);
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid var(--line);
+        font-weight: 600;
+        padding: 12px 14px;
+    }
+    table.grades td{
+        border-color: var(--line);
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+    table.grades tbody tr:hover{ background: var(--panel-2); }
+    .grade-pill{
+        font-family:'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 5px;
+        display:inline-block;
+    }
+    .grade-A{ background: rgba(87,199,194,0.15); color: var(--cyan); }
+    .grade-AB{ background: rgba(242,165,65,0.15); color: var(--amber); }
+    .grade-B{ background: rgba(223,231,236,0.12); color: var(--text); }
+
+    tfoot.grades-foot td{
+        background: var(--panel-2);
+        font-weight: 600;
+        border-top: 1px solid var(--line);
+    }
+
+    .stat-card{
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 20px;
+        text-align:center;
+    }
+    .stat-value{
+        font-family:'JetBrains Mono', monospace;
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: var(--amber);
+        line-height:1;
+    }
+    .stat-label{
+        color: var(--muted);
+        font-size: 0.78rem;
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    footer.page-end{
+        text-align:center;
+        color: var(--muted);
+        font-size: 0.8rem;
+        padding: 24px 0 8px;
+        border-top: 1px solid var(--line);
+        margin-top: 10px;
+    }
+
+    @media (max-width: 767px){
+        .id-card{ position: static; margin-bottom: 28px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="termbar">
+    <span class="dot r"></span>
+    <span class="dot y"></span>
+    <span class="dot g"></span>
+    <span class="path mono">ariel@profil:~$ cat profile.json</span>
+</div>
+
+<div class="shell">
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="id-card">
+                <img class="id-photo" src="foto.jpg.jpeg" alt="Foto Ariel Alvian Yusuf">
+                <div class="id-name">Ariel Alvian Yusuf</div>
+                <div class="id-role mono">Mahasiswa &middot; Sistem Teknologi Informasi</div>
+
+                <div class="id-row">
+                    <span class="id-label">NBI</span>
+                    <span class="id-value mono">1482500001</span>
+                </div>
+                <div class="id-row">
+                    <span class="id-label">Program Studi</span>
+                    <span class="id-value">Sistem Teknologi Informasi</span>
+                </div>
+                <div class="id-row">
+                    <span class="id-label">Kampus</span>
+                    <span class="id-value">Untag Surabaya</span>
+                </div>
+                <div class="id-row">
+                    <span class="id-label">IPK</span>
+                    <span class="id-value mono">3.36</span>
+                </div>
+
+                <div class="id-links">
+                    <a href="tel:+6282337587860">📞 +62 823-3758-7860</a>
+                    <a href="mailto:arielalfianyusuf@gmail.com">📧 arielalfianyusuf@gmail.com</a>
+                    <a href="#">📍 Surabaya, Indonesia</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">01</span>
+                    <h2 class="sect-title">tentang</h2>
+                </div>
+                <div class="panel">
+                    <p>Perkenalkan, saya Ariel Alvian Yusuf, lahir pada 26 November 2006 dan saat ini berusia 19 tahun. Saya sedang menempuh pendidikan S1 Program Studi Sistem Teknologi Informasi di Universitas 17 Agustus 1945 Surabaya.</p>
+                    <p>Saya tertarik dengan dunia teknologi, khususnya pengembangan website dan keamanan siber.</p>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">02</span>
+                    <h2 class="sect-title">hobi</h2>
+                </div>
+                <div class="panel">
+                    <ul class="stack-list">
+                        <li>Ngotak-ngatik OS seperti Ubuntu, Kali Linux, dan Parrot Security OS</li>
+                        <li>Belajar hal-hal baru</li>
+                        <li>Bermain game</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">03</span>
+                    <h2 class="sect-title">pendidikan</h2>
+                </div>
+                <div class="panel">
+                    <ul class="stack-list">
+                        <li>SMK Labschool Unesa 1 Surabaya</li>
+                        <li>S1 Sistem Teknologi Informasi, Universitas 17 Agustus 1945 Surabaya (sedang berjalan)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">04</span>
+                    <h2 class="sect-title">keahlian</h2>
+                </div>
+                <div class="panel">
+                    <div class="tag-list">
+                        <span class="tag">HTML &amp; CSS</span>
+                        <span class="tag">Basic Programming</span>
+                        <span class="tag">Editor Video</span>
+                        <span class="tag">Videografer</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">05</span>
+                    <h2 class="sect-title">nilai matakuliah</h2>
+                </div>
+
+                <div class="table-wrap">
+                    <div class="table-responsive">
+                        <table class="table grades align-middle">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode</th>
+                                    <th>Nama Matakuliah</th>
+                                    <th>Smt</th>
+                                    <th>SKS</th>
+                                    <th>Nilai</th>
+                                    <th>N.K.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td class="mono">14823153</td><td>Teknologi Informasi dan Aplikasi Bisnis Berkembang</td><td>2</td><td>3</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">9.00</td></tr>
+                                <tr><td>2</td><td class="mono">14823372</td><td>Statistika dan Probabilitas</td><td>2</td><td>2</td><td><span class="grade-pill grade-A">A</span></td><td class="mono">8.00</td></tr>
+                                <tr><td>3</td><td class="mono">14823313</td><td>Sistem Basis Data</td><td>2</td><td>2</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">10.50</td></tr>
+                                <tr><td>4</td><td class="mono">14823274</td><td>Pemrograman Berorientasi Objek</td><td>2</td><td>4</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">14.00</td></tr>
+                                <tr><td>5</td><td class="mono">14823393</td><td>Interaksi Manusia Komputer</td><td>2</td><td>3</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">9.00</td></tr>
+                                <tr><td>6</td><td class="mono">14823333</td><td>Algoritma dan Struktur Data</td><td>2</td><td>3</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">10.50</td></tr>
+                                <tr><td>7</td><td class="mono">14823192</td><td>Arsitektur dan Organisasi Komputer</td><td>2</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">7.00</td></tr>
+                                <tr><td>8</td><td class="mono">14823532</td><td>Bahasa Inggris</td><td>1</td><td>2</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">7.00</td></tr>
+                                <tr><td>9</td><td class="mono">14823103</td><td>Konsep dan Fondasi Sistem Informasi</td><td>1</td><td>3</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">10.50</td></tr>
+                                <tr><td>10</td><td class="mono">14823202</td><td>Sistem Operasi</td><td>1</td><td>2</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">7.00</td></tr>
+                                <tr><td>11</td><td class="mono">14823342</td><td>Aljabar Linier</td><td>1</td><td>2</td><td><span class="grade-pill grade-A">A</span></td><td class="mono">8.00</td></tr>
+                                <tr><td>12</td><td class="mono">14823362</td><td>Kalkulus</td><td>1</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">6.00</td></tr>
+                                <tr><td>13</td><td class="mono">14823352</td><td>Matematika Diskrit</td><td>1</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">6.00</td></tr>
+                                <tr><td>14</td><td class="mono">14823323</td><td>Dasar Pemrograman**</td><td>1</td><td>3</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">9.00</td></tr>
+                                <tr><td>15</td><td class="mono">14823012</td><td>Etika Pengembangan Teknologi Siber</td><td>1</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">6.00</td></tr>
+                            </tbody>
+                            <tfoot class="grades-foot">
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td class="mono">59</td>
+                                    <td colspan="2">Jumlah SKS</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">06</span>
+                    <h2 class="sect-title">matakuliah semester berjalan (semester 3)</h2>
+                </div>
+
+                <div class="table-wrap">
+                    <div class="table-responsive">
+                        <table class="table grades align-middle">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode</th>
+                                    <th>Nama Matakuliah</th>
+                                    <th>Smt</th>
+                                    <th>SKS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td class="mono">14823213</td><td>Desain Jaringan Komputer dan Komunikasi Data**</td><td>3</td><td>3</td></tr>
+                                <tr><td>2</td><td class="mono">14823383</td><td>Manajemen Data dan Keamanan Siber</td><td>3</td><td>3</td></tr>
+                                <tr><td>3</td><td class="mono">14823032</td><td>Manajemen Sistem Informasi</td><td>3</td><td>2</td></tr>
+                                <tr><td>4</td><td class="mono">1003124202</td><td>Pendidikan Agama Islam</td><td>3</td><td>2</td></tr>
+                                <tr><td>5</td><td class="mono">1003124102</td><td>Pendidikan Pancasila</td><td>3</td><td>2</td></tr>
+                                <tr><td>6</td><td class="mono">14823293</td><td>Pengembangan Sistem Berbasis Web**</td><td>3</td><td>3</td></tr>
+                                <tr><td>7</td><td class="mono">14823083</td><td>Rekayasa Kebutuhan Perangkat Lunak *</td><td>3</td><td>3</td></tr>
+                                <tr><td>8</td><td class="mono">14823123</td><td>Sistem Enterprise</td><td>3</td><td>3</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
+                    <span class="sect-tag mono">07</span>
+                    <h2 class="sect-title">ringkasan akademik</h2>
+                </div>
+                <div class="row g-3">
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <div class="stat-value">3.36</div>
+                            <div class="stat-label">IPK</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <div class="stat-value">59</div>
+                            <div class="stat-label">Total SKS</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-card">
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Matakuliah</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="page-end mono">
+        &copy; 2026 Ariel Alvian Yusuf — NBI 1482500001
+    </footer>
+</div>
+
+<script src="Ariel Alvian Yusuf-1482500001.js"></script>
+
+</body>
+</html>
