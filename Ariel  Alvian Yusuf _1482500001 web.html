@@ -233,6 +233,48 @@
         margin-top: 10px;
     }
 
+    body.light{
+        --bg:#f3f6f8; --panel:#ffffff; --panel-2:#e9eff3; --line:#cfd9e0;
+        --text:#18232b; --muted:#5d6f7b; --amber:#c9791a; --cyan:#13827c;
+    }
+    .toolbar{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center; }
+    .toolbar .field{ flex:1 1 180px; }
+    .field-sm{ max-width:150px; }
+    .ctrl{
+        width:100%;
+        background: var(--panel-2);
+        color: var(--text);
+        border:1px solid var(--line);
+        border-radius:6px;
+        padding:8px 12px;
+        font-size:0.88rem;
+    }
+    .ctrl:focus{ outline:none; border-color: var(--cyan); box-shadow:0 0 0 2px rgba(87,199,194,.2); }
+    .ctrl.is-invalid{ border-color: var(--red); }
+    .ctrl.is-valid{ border-color: var(--cyan); }
+    .btn-x{
+        background: var(--panel-2); color: var(--text);
+        border:1px solid var(--line); border-radius:6px;
+        padding:8px 14px; font-size:0.85rem; cursor:pointer;
+    }
+    .btn-x:hover{ border-color: var(--amber); color: var(--amber); }
+    .btn-x.primary{ background: var(--cyan); color:#10161c; border-color: var(--cyan); font-weight:600; }
+    .btn-x.primary:hover{ filter:brightness(1.1); color:#10161c; }
+    .btn-del{ padding:2px 9px; font-size:0.78rem; color: var(--red); }
+    .btn-del:hover{ border-color: var(--red); color: var(--red); }
+    .btn-tema{ margin-left:auto; padding:3px 10px; font-size:0.75rem; }
+    .result-info{ color: var(--muted); font-size:0.8rem; margin: 0 0 10px; }
+    .empty-row td{ text-align:center; color: var(--muted); padding:22px 14px !important; }
+    .hidden{ display:none !important; }
+    .row-new{ animation: flash 1.6s ease-out; }
+    @keyframes flash{ from{ background: rgba(242,165,65,.35); } to{ background: transparent; } }
+    .form-label-x{ display:block; font-size:0.78rem; color: var(--muted); margin-bottom:4px; }
+    .err-msg{ color: var(--red); font-size:0.75rem; min-height:1.1em; margin-top:3px; }
+    .alert-x{ border-radius:6px; padding:10px 14px; font-size:0.85rem; margin-top:14px; }
+    .alert-x.ok{ background: rgba(87,199,194,.15); color: var(--cyan); border:1px solid var(--cyan); }
+    .alert-x.fail{ background: rgba(226,87,76,.15); color: var(--red); border:1px solid var(--red); }
+    .collapsible-toggle{ cursor:pointer; user-select:none; }
+    .grade-BC, .grade-C, .grade-D, .grade-E{ background: rgba(226,87,76,0.15); color: var(--red); }
     @media (max-width: 767px){
         .id-card{ position: static; margin-bottom: 28px; }
     }
@@ -245,6 +287,7 @@
     <span class="dot y"></span>
     <span class="dot g"></span>
     <span class="path mono">ariel@profil:~$ cat profile.json</span>
+    <button type="button" id="btnTema" class="btn-x btn-tema mono">tema: gelap</button>
 </div>
 
 <div class="shell">
@@ -270,7 +313,7 @@
                 </div>
                 <div class="id-row">
                     <span class="id-label">IPK</span>
-                    <span class="id-value mono">3.36</span>
+                    <span class="id-value mono" id="sideIPK">3.36</span>
                 </div>
 
                 <div class="id-links">
@@ -342,6 +385,26 @@
                     <h2 class="sect-title">nilai matakuliah</h2>
                 </div>
 
+                <div class="toolbar">
+                    <div class="field">
+                        <input type="search" id="cari" class="ctrl" placeholder="Cari nama / kode matakuliah...">
+                    </div>
+                    <div class="field field-sm">
+                        <select id="filterSmt" class="ctrl">
+                            <option value="all">Semua semester</option>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                        </select>
+                    </div>
+                    <div class="field field-sm">
+                        <select id="filterNilai" class="ctrl">
+                            <option value="all">Semua nilai</option>
+                        </select>
+                    </div>
+                    <button type="button" id="btnReset" class="btn-x">Reset</button>
+                </div>
+                <p class="result-info mono" id="infoHasil"></p>
+
                 <div class="table-wrap">
                     <div class="table-responsive">
                         <table class="table grades align-middle">
@@ -354,30 +417,16 @@
                                     <th>SKS</th>
                                     <th>Nilai</th>
                                     <th>N.K.</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr><td>1</td><td class="mono">14823153</td><td>Teknologi Informasi dan Aplikasi Bisnis Berkembang</td><td>2</td><td>3</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">9.00</td></tr>
-                                <tr><td>2</td><td class="mono">14823372</td><td>Statistika dan Probabilitas</td><td>2</td><td>2</td><td><span class="grade-pill grade-A">A</span></td><td class="mono">8.00</td></tr>
-                                <tr><td>3</td><td class="mono">14823313</td><td>Sistem Basis Data</td><td>2</td><td>2</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">10.50</td></tr>
-                                <tr><td>4</td><td class="mono">14823274</td><td>Pemrograman Berorientasi Objek</td><td>2</td><td>4</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">14.00</td></tr>
-                                <tr><td>5</td><td class="mono">14823393</td><td>Interaksi Manusia Komputer</td><td>2</td><td>3</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">9.00</td></tr>
-                                <tr><td>6</td><td class="mono">14823333</td><td>Algoritma dan Struktur Data</td><td>2</td><td>3</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">10.50</td></tr>
-                                <tr><td>7</td><td class="mono">14823192</td><td>Arsitektur dan Organisasi Komputer</td><td>2</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">7.00</td></tr>
-                                <tr><td>8</td><td class="mono">14823532</td><td>Bahasa Inggris</td><td>1</td><td>2</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">7.00</td></tr>
-                                <tr><td>9</td><td class="mono">14823103</td><td>Konsep dan Fondasi Sistem Informasi</td><td>1</td><td>3</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">10.50</td></tr>
-                                <tr><td>10</td><td class="mono">14823202</td><td>Sistem Operasi</td><td>1</td><td>2</td><td><span class="grade-pill grade-AB">AB</span></td><td class="mono">7.00</td></tr>
-                                <tr><td>11</td><td class="mono">14823342</td><td>Aljabar Linier</td><td>1</td><td>2</td><td><span class="grade-pill grade-A">A</span></td><td class="mono">8.00</td></tr>
-                                <tr><td>12</td><td class="mono">14823362</td><td>Kalkulus</td><td>1</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">6.00</td></tr>
-                                <tr><td>13</td><td class="mono">14823352</td><td>Matematika Diskrit</td><td>1</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">6.00</td></tr>
-                                <tr><td>14</td><td class="mono">14823323</td><td>Dasar Pemrograman**</td><td>1</td><td>3</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">9.00</td></tr>
-                                <tr><td>15</td><td class="mono">14823012</td><td>Etika Pengembangan Teknologi Siber</td><td>1</td><td>2</td><td><span class="grade-pill grade-B">B</span></td><td class="mono">6.00</td></tr>
+                            <tbody id="tbodyNilai">
                             </tbody>
                             <tfoot class="grades-foot">
                                 <tr>
                                     <td colspan="4"></td>
-                                    <td class="mono">59</td>
-                                    <td colspan="2">Jumlah SKS</td>
+                                    <td class="mono" id="footSKS">38</td>
+                                    <td colspan="3">Jumlah SKS</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -387,11 +436,53 @@
 
             <div class="sect">
                 <div class="sect-head">
+                    <span class="sect-tag mono">+</span>
+                    <h2 class="sect-title">tambah matakuliah</h2>
+                </div>
+                <div class="panel">
+                    <form id="formTambah" novalidate>
+                        <div class="row g-3">
+                            <div class="col-sm-4">
+                                <label class="form-label-x" for="inKode">Kode (8 digit angka)</label>
+                                <input type="text" id="inKode" class="ctrl mono" maxlength="8" placeholder="14823xxx">
+                                <div class="err-msg" data-err="inKode"></div>
+                            </div>
+                            <div class="col-sm-8">
+                                <label class="form-label-x" for="inNama">Nama matakuliah</label>
+                                <input type="text" id="inNama" class="ctrl" placeholder="Contoh: Jaringan Komputer">
+                                <div class="err-msg" data-err="inNama"></div>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label-x" for="inSmt">Semester (1-8)</label>
+                                <input type="number" id="inSmt" class="ctrl" min="1" max="8">
+                                <div class="err-msg" data-err="inSmt"></div>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label-x" for="inSks">SKS (1-6)</label>
+                                <input type="number" id="inSks" class="ctrl" min="1" max="6">
+                                <div class="err-msg" data-err="inSks"></div>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label-x" for="inNilai">Nilai</label>
+                                <select id="inNilai" class="ctrl">
+                                    <option value="">Pilih...</option>
+                                </select>
+                                <div class="err-msg" data-err="inNilai"></div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-x primary mt-3">+ Tambah</button>
+                        <div id="pesanForm" class="alert-x hidden"></div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="sect">
+                <div class="sect-head">
                     <span class="sect-tag mono">06</span>
-                    <h2 class="sect-title">matakuliah semester berjalan (semester 3)</h2>
+                    <h2 class="sect-title collapsible-toggle" id="toggleSmt3">matakuliah semester berjalan (semester 3) <span class="mono" id="arrowSmt3">[-]</span></h2>
                 </div>
 
-                <div class="table-wrap">
+                <div class="table-wrap" id="wrapSmt3">
                     <div class="table-responsive">
                         <table class="table grades align-middle">
                             <thead>
@@ -403,15 +494,7 @@
                                     <th>SKS</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr><td>1</td><td class="mono">14823213</td><td>Desain Jaringan Komputer dan Komunikasi Data**</td><td>3</td><td>3</td></tr>
-                                <tr><td>2</td><td class="mono">14823383</td><td>Manajemen Data dan Keamanan Siber</td><td>3</td><td>3</td></tr>
-                                <tr><td>3</td><td class="mono">14823032</td><td>Manajemen Sistem Informasi</td><td>3</td><td>2</td></tr>
-                                <tr><td>4</td><td class="mono">1003124202</td><td>Pendidikan Agama Islam</td><td>3</td><td>2</td></tr>
-                                <tr><td>5</td><td class="mono">1003124102</td><td>Pendidikan Pancasila</td><td>3</td><td>2</td></tr>
-                                <tr><td>6</td><td class="mono">14823293</td><td>Pengembangan Sistem Berbasis Web**</td><td>3</td><td>3</td></tr>
-                                <tr><td>7</td><td class="mono">14823083</td><td>Rekayasa Kebutuhan Perangkat Lunak *</td><td>3</td><td>3</td></tr>
-                                <tr><td>8</td><td class="mono">14823123</td><td>Sistem Enterprise</td><td>3</td><td>3</td></tr>
+                            <tbody id="tbodySmt3">
                             </tbody>
                         </table>
                     </div>
@@ -426,19 +509,19 @@
                 <div class="row g-3">
                     <div class="col-4">
                         <div class="stat-card">
-                            <div class="stat-value">3.36</div>
+                            <div class="stat-value" id="statIPK">3.36</div>
                             <div class="stat-label">IPK</div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="stat-card">
-                            <div class="stat-value">59</div>
+                            <div class="stat-value" id="statSKS">59</div>
                             <div class="stat-label">Total SKS</div>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="stat-card">
-                            <div class="stat-value">23</div>
+                            <div class="stat-value" id="statMK">23</div>
                             <div class="stat-label">Matakuliah</div>
                         </div>
                     </div>
