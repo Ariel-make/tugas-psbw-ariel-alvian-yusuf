@@ -15,7 +15,7 @@ let matakuliah = [
     { kode: "14823323", nama: "Dasar Pemrograman", smt: 1, sks: 3, nilai: "B" },
     { kode: "14823012", nama: "Etika Pengembangan Teknologi Siber", smt: 1, sks: 2, nilai: "B" }
 ];
- 
+
 const semesterBerjalan = [
     { kode: "14823213", nama: "Desain Jaringan Komputer dan Komunikasi Data", smt: 3, sks: 3 },
     { kode: "14823383", nama: "Manajemen Data dan Keamanan Siber", smt: 3, sks: 3 },
@@ -26,15 +26,15 @@ const semesterBerjalan = [
     { kode: "14823083", nama: "Rekayasa Kebutuhan Perangkat Lunak", smt: 3, sks: 3 },
     { kode: "14823123", nama: "Sistem Enterprise", smt: 3, sks: 3 }
 ];
- 
+
 const bobot = { "A": 4, "AB": 3.5, "B": 3, "BC": 2.5, "C": 2, "D": 1, "E": 0 };
- 
+
 function hitungTotalSKS(data) {
     let total = 0;
     for (const mk of data) total += mk.sks;
     return total;
 }
- 
+
 function hitungIPK(data) {
     let totalNK = 0, totalSKS = 0;
     for (let i = 0; i < data.length; i++) {
@@ -43,32 +43,32 @@ function hitungIPK(data) {
     }
     return totalSKS > 0 ? totalNK / totalSKS : 0;
 }
- 
+
 function cariMatakuliah(data, kataKunci) {
     const q = kataKunci.toLowerCase();
     return data.filter(mk => mk.nama.toLowerCase().includes(q) || mk.kode.includes(q));
 }
- 
-const $ = (id) => document.getElementById(id);
-const tbodyNilai = $("tbodyNilai");
-const tbodySmt3 = $("tbodySmt3");
-const inputCari = $("cari");
-const selSmt = $("filterSmt");
-const selNilaiFilter = $("filterNilai");
-const form = $("formTambah");
-const pesanForm = $("pesanForm");
- 
-let kodeBaru = null; 
- 
+
+const byId = (id) => document.getElementById(id);
+
+const tbodyNilai = byId("tbodyNilai");
+const tbodySmt3 = byId("tbodySmt3");
+const inputCari = byId("cari");
+const selSmt = byId("filterSmt");
+const selNilaiFilter = byId("filterNilai");
+const form = byId("formTambah");
+
+let kodeBaru = null;
+
 function renderNilai(data) {
     tbodyNilai.innerHTML = "";
- 
+
     if (data.length === 0) {
         tbodyNilai.innerHTML = `<tr class="empty-row"><td colspan="8">Tidak ada matakuliah yang cocok.</td></tr>`;
     }
- 
+
     data.forEach((mk, i) => {
-        const nk = (bobot[mk.nilai] * mk.sks).toFixed(2);
+        const nk = (bobot[mk.nilai] * mk.sks).toFixed(2); 
         const tr = document.createElement("tr");
         if (mk.kode === kodeBaru) tr.classList.add("row-new");
         tr.innerHTML = `
@@ -83,11 +83,11 @@ function renderNilai(data) {
         `;
         tbodyNilai.appendChild(tr);
     });
- 
-    $("footSKS").textContent = hitungTotalSKS(data);
-    $("infoHasil").textContent = `Menampilkan ${data.length} dari ${matakuliah.length} matakuliah`;
+
+    byId("footSKS").textContent = hitungTotalSKS(data);
+    byId("infoHasil").textContent = `Menampilkan ${data.length} dari ${matakuliah.length} matakuliah`;
 }
- 
+
 function renderSemester3() {
     tbodySmt3.innerHTML = "";
     semesterBerjalan.forEach((mk, i) => {
@@ -102,14 +102,14 @@ function renderSemester3() {
         tbodySmt3.appendChild(tr);
     });
 }
- 
+
 function renderRingkasan() {
-    $("statIPK").textContent = hitungIPK(matakuliah).toFixed(2);
-    $("sideIPK").textContent = hitungIPK(matakuliah).toFixed(2);
-    $("statSKS").textContent = hitungTotalSKS(matakuliah) + hitungTotalSKS(semesterBerjalan);
-    $("statMK").textContent = matakuliah.length + semesterBerjalan.length;
+    byId("statIPK").textContent = hitungIPK(matakuliah).toFixed(2);
+    byId("sideIPK").textContent = hitungIPK(matakuliah).toFixed(2);
+    byId("statSKS").textContent = hitungTotalSKS(matakuliah) + hitungTotalSKS(semesterBerjalan);
+    byId("statMK").textContent = matakuliah.length + semesterBerjalan.length;
 }
- 
+
 function dataTerfilter() {
     let hasil = cariMatakuliah(matakuliah, inputCari.value.trim());
     if (selSmt.value !== "all") {
@@ -120,126 +120,137 @@ function dataTerfilter() {
     }
     return hasil;
 }
- 
+
 function refresh() {
     renderNilai(dataTerfilter());
     renderRingkasan();
 }
- 
+
 Object.keys(bobot).forEach(n => {
     const o1 = document.createElement("option");
     o1.value = n; o1.textContent = n;
     selNilaiFilter.appendChild(o1);
- 
+
     const o2 = document.createElement("option");
     o2.value = n; o2.textContent = n;
-    $("inNilai").appendChild(o2);
+    byId("inNilai").appendChild(o2);
 });
- 
+
 inputCari.addEventListener("input", refresh);
 selSmt.addEventListener("change", refresh);
 selNilaiFilter.addEventListener("change", refresh);
- 
-$("btnReset").addEventListener("click", function () {
+
+byId("btnReset").addEventListener("click", function () {
     inputCari.value = "";
     selSmt.value = "all";
     selNilaiFilter.value = "all";
     refresh();
 });
- 
-tbodyNilai.addEventListener("click", function (e) {
-    const btn = e.target.closest(".btn-del");
-    if (!btn) return;
-    matakuliah = matakuliah.filter(mk => mk.kode !== btn.dataset.kode);
-    refresh();
-});
- 
-$("toggleSmt3").addEventListener("click", function () {
-    const wrap = $("wrapSmt3");
-    wrap.classList.toggle("hidden");
-    $("arrowSmt3").textContent = wrap.classList.contains("hidden") ? "[+]" : "[-]";
-});
- 
-$("btnTema").addEventListener("click", function () {
+
+byId("btnTema").addEventListener("click", function () {
     document.body.classList.toggle("light");
     this.textContent = "tema: " + (document.body.classList.contains("light") ? "terang" : "gelap");
 });
- 
+
+$("#tbodyNilai").on("click", ".btn-del", function () {
+    // .attr dipakai (bukan .data) agar kode tetap berupa string, bukan angka
+    const kode = $(this).attr("data-kode");
+
+    $(this).closest("tr").fadeOut(300, function () {
+        matakuliah = matakuliah.filter(mk => mk.kode !== kode);
+        refresh();
+    });
+});
+
+$("#toggleSmt3").on("click", function () {
+    $("#wrapSmt3").slideToggle(300, function () {
+        // Ubah tanda [-] / [+] sesuai kondisi tabel
+        $("#arrowSmt3").text($(this).is(":visible") ? "[-]" : "[+]");
+    });
+});
+
+function tampilPesan(teks, sukses) {
+    $("#pesanForm")
+        .stop(true, true)                        
+        .removeClass("hidden ok fail")
+        .addClass(sukses ? "ok" : "fail")
+        .text(teks)
+        .hide()
+        .fadeIn(300)
+        .delay(3500)
+        .fadeOut(400);
+}
+
 function setError(idInput, pesan) {
-    const el = $(idInput);
+    const el = byId(idInput);
     const box = document.querySelector(`[data-err="${idInput}"]`);
     box.textContent = pesan;
     el.classList.toggle("is-invalid", pesan !== "");
     el.classList.toggle("is-valid", pesan === "");
     return pesan === "";
 }
- 
+
 function validasiForm() {
-    const kode = $("inKode").value.trim();
-    const nama = $("inNama").value.trim();
-    const smt = $("inSmt").value;
-    const sks = $("inSks").value;
-    const nilai = $("inNilai").value;
- 
+    const kode = byId("inKode").value.trim();
+    const nama = byId("inNama").value.trim();
+    const smt = byId("inSmt").value;
+    const sks = byId("inSks").value;
+    const nilai = byId("inNilai").value;
+
     let ok = true;
- 
+
     if (!/^\d{8}$/.test(kode)) ok = setError("inKode", "Kode harus tepat 8 digit angka.") && ok;
     else if (matakuliah.some(mk => mk.kode === kode)) ok = setError("inKode", "Kode sudah terdaftar.") && ok;
     else setError("inKode", "");
- 
+
     if (nama.length < 3) ok = setError("inNama", "Nama minimal 3 karakter.") && ok;
     else setError("inNama", "");
- 
+
     if (smt === "" || !Number.isInteger(Number(smt)) || Number(smt) < 1 || Number(smt) > 8)
         ok = setError("inSmt", "Isi semester 1 - 8.") && ok;
     else setError("inSmt", "");
- 
+
     if (sks === "" || !Number.isInteger(Number(sks)) || Number(sks) < 1 || Number(sks) > 6)
         ok = setError("inSks", "Isi SKS 1 - 6.") && ok;
     else setError("inSks", "");
- 
+
     if (nilai === "") ok = setError("inNilai", "Pilih nilai.") && ok;
     else setError("inNilai", "");
- 
+
     return ok;
 }
- 
-function tampilPesan(teks, sukses) {
-    pesanForm.textContent = teks;
-    pesanForm.classList.remove("hidden", "ok", "fail");
-    pesanForm.classList.add(sukses ? "ok" : "fail");
-}
- 
+
 form.addEventListener("submit", function (e) {
-    e.preventDefault(); 
- 
+    e.preventDefault(); // cegah halaman reload
+
     if (!validasiForm()) {
         tampilPesan("Data belum valid, periksa kembali isian di atas.", false);
         return;
     }
- 
+
     const baru = {
-        kode: $("inKode").value.trim(),
-        nama: $("inNama").value.trim(),
-        smt: Number($("inSmt").value),
-        sks: Number($("inSks").value),
-        nilai: $("inNilai").value
+        kode: byId("inKode").value.trim(),
+        nama: byId("inNama").value.trim(),
+        smt: Number(byId("inSmt").value),
+        sks: Number(byId("inSks").value),
+        nilai: byId("inNilai").value
     };
     matakuliah.push(baru);
-    kodeBaru = baru.kode;
- 
+    kodeBaru = baru.kode; 
+
     form.reset();
     form.querySelectorAll(".ctrl").forEach(el => el.classList.remove("is-valid", "is-invalid"));
     form.querySelectorAll(".err-msg").forEach(el => (el.textContent = ""));
- 
+
     inputCari.value = "";
     selSmt.value = "all";
     selNilaiFilter.value = "all";
- 
+
     refresh();
     tampilPesan(`"${baru.nama}" berhasil ditambahkan.`, true);
     kodeBaru = null;
 });
- 
-renderSemester3();
-refresh();
+
+
+renderSemester3(); 
+refresh();         
